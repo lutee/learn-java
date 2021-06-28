@@ -1,0 +1,94 @@
+spring:
+  application:
+    name: learn-java
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    name: TencentDatasource
+    url: jdbc:mysql://1.15.68.129:3306/employees?serverTimezone=UTC
+    username: root
+    password: yxcling.cn
+    druid:
+      initial-size: 5
+      max-active: 30
+      min-idle: 5
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 50
+      filters: stat,wall
+      connection-properties: durid.stat.mergeSql=true
+      use-global-data-source-stat: true
+      stat-view-servelt.login-username: admin
+      stat-view-servlet.login-password: yxcling.cn
+  redis:
+    database: 0
+    host: 1.15.68.129
+    port: 6379
+    password: yxcling.cn
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 200
+        max-wait: 5000
+        max-idle: 50
+        min-idel: 5
+        # eviction线程调度时间间隔
+        time-between-eviction-runs: 1
+  rabbitmq:
+    host: 1.15.68.129
+    port: 5672
+    username: admin
+    password: admin
+      
+server:
+  port: 8080
+  connection-timeout: 5000
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  servlet:
+    context-path: /
+    multipart:
+      enabled: true
+      file-size-threshold: 10MB
+      max-file-size: 100MB
+      max-request-size: 125MB
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: "*"
+    health:
+      show-details: always
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true
+    lazyLoadingEnabled: true
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  global-config:
+    db-config:
+      logic-not-delete-value: 1
+      logic-delete-value: 0
+
+logging:
+  level:
+    root: info
+    cn.chenyuxian.learn: debug
+
+
