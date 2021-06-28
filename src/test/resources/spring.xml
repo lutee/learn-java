@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userDao" class="cn.chenyuxian.spring.bean.UserDao" init-method="initDataMethod" destroy-method="destroyDataMethod" />
+    <bean id="userService" class="cn.chenyuxian.spring.bean.UserService">
+        <property name="uid" value="10001"/>
+        <property name="userDao" ref="userDao"/>
+        <property name="location" value="深圳"/>
+        <proeprty name="company" value="腾讯"/>
+    </bean>
+    <bean class="cn.chenyuxian.spring.common.MyBeanPostProcessor"/>
+    <bean class="cn.chenyuxian.spring.common.MyBeanFactoryPostProcessor"/>    
+</beans>

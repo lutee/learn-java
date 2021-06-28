@@ -1,15 +1,21 @@
 package cn.chenyuxian.spring.beans.factory.support;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 import cn.chenyuxian.spring.beans.BeansException;
 import cn.chenyuxian.spring.beans.PropertyValue;
 import cn.chenyuxian.spring.beans.PropertyValues;
+import cn.chenyuxian.spring.beans.factory.DisposableBean;
+import cn.chenyuxian.spring.beans.factory.InitializingBean;
+import cn.chenyuxian.spring.beans.factory.config.AutowireCapableBeanFactory;
 import cn.chenyuxian.spring.beans.factory.config.BeanDefinition;
+import cn.chenyuxian.spring.beans.factory.config.BeanPostProcessor;
 import cn.chenyuxian.spring.beans.factory.config.BeanReference;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 
-public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
+public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory{
 
 	private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
@@ -19,9 +25,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			bean = createBeanInstance(beanDefinition, beanName, args);
 			applyPropertyValues(beanName, bean, beanDefinition);
+			bean = initializeBean(beanName, bean, beanDefinition);
 		} catch (Exception e) {
 			throw new BeansException("Instantiation of bean failed", e);
 		}
+		registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
 		addSingleton(beanName, bean);
 		return bean;
 	}
@@ -62,6 +70,57 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 	public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
 		this.instantiationStrategy = instantiationStrategy;
+	}
+	
+	private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+		Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+		invokeInitMethods(beanName, wrappedBean, beanDefinition);
+		wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+		return wrappedBean;
+	}
+	
+	private void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+		if(bean instanceof InitializingBean) {
+			((InitializingBean) bean).afterPropertiesSet();
+		}
+		String initMethodName = beanDefinition.getInitMethodName();
+		if(StrUtil.isNotEmpty(initMethodName)) {
+			Method initMethod = beanDefinition.getBeanClass().getMethod(initMethodName);
+			if(null == initMethod) {
+				throw new BeansException("Could not find an init method named" + initMethodName + "on bean with me" + beanName + "");
+			}
+			initMethod.invoke(bean);
+		}
+	}
+	
+	@Override
+	public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName)
+			throws BeansException {
+		Object result = existingBean;
+		for(BeanPostProcessor processor : getBeanPostProcessors()) {
+			Object current = processor.postProcessBeforeInitialization(result, beanName);
+			if(null == current) return result;
+			result = current;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
+			throws BeansException {
+		Object result = existingBean;
+		for(BeanPostProcessor processor : getBeanPostProcessors()) {
+			Object current = processor.postProcessAfterInitialization(result, beanName);
+			if(null == current) return result;
+			result = current;
+		}
+		return result;
+	}
+	
+	protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+		if(bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+			registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+		}
 	}
 
 }

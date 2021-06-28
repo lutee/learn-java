@@ -21,7 +21,7 @@ import cn.hutool.core.util.XmlUtil;
 
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
 
-	protected XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
+	public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
 		super(registry);
 	}
 	
@@ -87,6 +87,13 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
 				throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
 			}
 			getRegistry().registerBeanDefinition(beanName, beanDefinition);
+		}
+	}
+
+	@Override
+	public void loadBeanDefinitions(String... locations) throws BeansException {
+		for(String location : locations) {
+			loadBeanDefinitions(location);
 		}
 	}
 }

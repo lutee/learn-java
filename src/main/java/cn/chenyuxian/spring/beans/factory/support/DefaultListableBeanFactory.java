@@ -6,6 +6,7 @@ import java.util.Map;
 import cn.chenyuxian.spring.beans.BeansException;
 import cn.chenyuxian.spring.beans.factory.ConfigurableListableBeanFactory;
 import cn.chenyuxian.spring.beans.factory.config.BeanDefinition;
+import cn.chenyuxian.spring.beans.factory.config.BeanPostProcessor;
 
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry, ConfigurableListableBeanFactory{
 	
@@ -43,6 +44,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		});
 		return result;
+	}
+
+	@Override
+	public void preInstantiateSingletons() throws BeansException {
+		beanDefinitionMap.keySet().forEach(this::getBean);
 	}
 	
 }
