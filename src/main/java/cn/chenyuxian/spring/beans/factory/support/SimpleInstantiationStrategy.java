@@ -7,7 +7,6 @@ import cn.chenyuxian.spring.beans.factory.config.BeanDefinition;
 
 public class SimpleInstantiationStrategy implements InstantiationStrategy{
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args)
 			throws BeansException {

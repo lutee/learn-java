@@ -16,17 +16,13 @@ public class DisposableBeanAdapter implements DisposableBean{
 	private String destroyMethodName;
 	
 	public DisposableBeanAdapter(Object bean, String beanName, BeanDefinition beanDefinition) {
-		super();
 		this.bean = bean;
 		this.beanName = beanName;
 		this.destroyMethodName = beanDefinition.getDestroyMethodName();
 	}
 
-
-
 	@Override
 	public void destroy() throws Exception {
-		// TODO Auto-generated method stub
 		if(bean instanceof DisposableBean) {
 			((DisposableBean) bean).destroy();
 		}
