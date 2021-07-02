@@ -18,7 +18,7 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
 	private String uid;
 	private String company;
 	private String location;
-	private UserDao userDao;
+	private IUserDao userDao;
 	
 	public String queryUserInfo() {
 		 return userDao.queryUserName(uid) + "," + company + "," + location;
@@ -32,11 +32,11 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
 		this.uid = uid;
 	}
 
-	public UserDao getUserDao() {
+	public IUserDao getUserDao() {
 		return userDao;
 	}
 
-	public void setUserDao(UserDao userDao) {
+	public void setUserDao(IUserDao userDao) {
 		this.userDao = userDao;
 	}
 

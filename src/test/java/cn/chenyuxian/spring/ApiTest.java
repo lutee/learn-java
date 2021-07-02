@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.openjdk.jol.info.ClassLayout;
 
 import cn.chenyuxian.learnspring.beans.PropertyValue;
 import cn.chenyuxian.learnspring.beans.PropertyValues;
@@ -119,5 +120,20 @@ public class ApiTest {
 		System.out.println("测试结果:" + result);
 		System.out.println("ApplicationContextAware:" + userService.getApplicationContext());
 		System.out.println("BeanFactoryAware:" + userService.getBeanFactory());
+	}
+	
+	@Test
+	public void test_prototype() {
+		ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+		applicationContext.registerShutdownHook();
+		
+		UserService userService = applicationContext.getBean("userService", UserService.class);
+		UserService userService2 = applicationContext.getBean("userService", UserService.class);
+		
+		System.out.println(userService);
+		System.out.println(userService2);
+		
+		System.out.println(userService + "十六进制哈希:" + Integer.toHexString(userService.hashCode()));
+		System.out.println(ClassLayout.parseInstance(userService).toPrintable());
 	}
 }

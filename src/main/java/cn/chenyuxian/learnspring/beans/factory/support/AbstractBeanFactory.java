@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.chenyuxian.learnspring.beans.BeansException;
+import cn.chenyuxian.learnspring.beans.factory.FactoryBean;
 import cn.chenyuxian.learnspring.beans.factory.config.BeanDefinition;
 import cn.chenyuxian.learnspring.beans.factory.config.BeanPostProcessor;
 import cn.chenyuxian.learnspring.beans.factory.config.ConfigurableBeanFactory;
 import cn.chenyuxian.learnspring.util.ClassUtils;
 
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
 	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 	
@@ -31,12 +32,28 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 	}
 	
 	protected <T> T doGetBean(final String name, final Object[] args) {
-		Object bean = getSingleton(name);
-		if(bean != null) {
-			return (T) bean;
+		Object sharedInstance = getSingleton(name);
+		if(sharedInstance != null) {
+			// 如果是FactoryBean, 则需要调用FactoryBean#getObject
+			return (T) getObjectForBeanInstance(sharedInstance, name);
 		}
 		BeanDefinition beanDefinition = getBeanDefinition(name);
 		return (T) createBean(name, beanDefinition, args);
+	}
+	
+	private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+		if(!(beanInstance instanceof FactoryBean)) {
+			return beanInstance;
+		}
+		
+		Object object = getCachedObjectForFactoryBean(beanName);
+		
+		if(object == null) {
+			FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+			object = getObjectFromFactoryBean(factoryBean, beanName);
+		}
+		
+		return object;
 	}
 	
 	protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
