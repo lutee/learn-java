@@ -1,5 +1,11 @@
 package cn.chenyuxian.spring.util;
 
+/**
+ * 类工具
+ * @author chenyuxian
+ *
+ * @date 2021-07-14
+ */
 public class ClassUtils {
 	
 	public static ClassLoader getDefaultClassLoader() {
@@ -13,5 +19,13 @@ public class ClassUtils {
 			c1 = ClassUtils.class.getClassLoader();
 		}
 		return c1;
+	}
+	
+	public static boolean isCglibProxyClass(Class<?> clazz) {
+		return clazz != null && isCglibProxyClassName(clazz.getName());
+	}
+	
+	public static boolean isCglibProxyClassName(String className) {
+		return className != null && className.contains("$$");
 	}
 }

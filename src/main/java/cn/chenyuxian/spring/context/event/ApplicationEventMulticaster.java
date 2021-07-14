@@ -1,8 +1,7 @@
 package cn.chenyuxian.spring.context.event;
 
-import org.springframework.context.ApplicationListener;
-
 import cn.chenyuxian.spring.context.ApplicationEvent;
+import cn.chenyuxian.spring.context.ApplicationListener;
 
 public interface ApplicationEventMulticaster {
 	
