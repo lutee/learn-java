@@ -10,4 +10,10 @@
         <property name="company" value="腾讯"/>
         <property name="location" value="深圳"/>
     </bean>    
+    
+    <bean class="cn.chenyuxian.spring.event.ContextRefreshedEventListener"/>
+
+    <bean class="cn.chenyuxian.spring.event.CustomEventListener"/>
+
+    <bean class="cn.chenyuxian.spring.event.ContextClosedEventListener"/>
 </beans>

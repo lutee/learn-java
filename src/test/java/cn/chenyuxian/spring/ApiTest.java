@@ -20,6 +20,7 @@ import cn.chenyuxian.spring.common.MyBeanPostProcessor;
 import cn.chenyuxian.spring.context.support.ClassPathXmlApplicationContext;
 import cn.chenyuxian.spring.core.io.DefaultResourceLoader;
 import cn.chenyuxian.spring.core.io.Resource;
+import cn.chenyuxian.spring.event.CustomEvent;
 import cn.hutool.core.io.IoUtil;
 
 public class ApiTest {
@@ -135,5 +136,12 @@ public class ApiTest {
 		
 		System.out.println(userService + "十六进制哈希:" + Integer.toHexString(userService.hashCode()));
 		System.out.println(ClassLayout.parseInstance(userService).toPrintable());
+	}
+	
+	@Test
+	public void test_event() {
+		ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+		applicationContext.publishEvent(new CustomEvent(applicationContext, 12132312L, "成功了"));
+		applicationContext.registerShutdownHook();
 	}
 }
