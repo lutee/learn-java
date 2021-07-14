@@ -1,14 +1,14 @@
 package cn.chenyuxian.spring.bean;
 
-import cn.chenyuxian.learnspring.beans.BeansException;
-import cn.chenyuxian.learnspring.beans.factory.BeanClassLoaderAware;
-import cn.chenyuxian.learnspring.beans.factory.BeanFactory;
-import cn.chenyuxian.learnspring.beans.factory.BeanFactoryAware;
-import cn.chenyuxian.learnspring.beans.factory.BeanNameAware;
-import cn.chenyuxian.learnspring.beans.factory.DisposableBean;
-import cn.chenyuxian.learnspring.beans.factory.InitializingBean;
-import cn.chenyuxian.learnspring.context.ApplicationContext;
-import cn.chenyuxian.learnspring.context.ApplicationContextAware;
+import cn.chenyuxian.spring.beans.BeansException;
+import cn.chenyuxian.spring.beans.factory.BeanClassLoaderAware;
+import cn.chenyuxian.spring.beans.factory.BeanFactory;
+import cn.chenyuxian.spring.beans.factory.BeanFactoryAware;
+import cn.chenyuxian.spring.beans.factory.BeanNameAware;
+import cn.chenyuxian.spring.beans.factory.DisposableBean;
+import cn.chenyuxian.spring.beans.factory.InitializingBean;
+import cn.chenyuxian.spring.context.ApplicationContext;
+import cn.chenyuxian.spring.context.ApplicationContextAware;
 
 public class UserService implements InitializingBean, DisposableBean, BeanNameAware, BeanClassLoaderAware, ApplicationContextAware, BeanFactoryAware{
 	

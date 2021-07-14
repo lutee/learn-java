@@ -5,7 +5,7 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.chenyuxian.learnspring.beans.factory.FactoryBean;
+import cn.chenyuxian.spring.beans.factory.FactoryBean;
 
 public class ProxyBeanFactory implements FactoryBean<IUserDao>{
 

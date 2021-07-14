@@ -7,19 +7,19 @@ import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.ClassLayout;
 
-import cn.chenyuxian.learnspring.beans.PropertyValue;
-import cn.chenyuxian.learnspring.beans.PropertyValues;
-import cn.chenyuxian.learnspring.beans.factory.config.BeanDefinition;
-import cn.chenyuxian.learnspring.beans.factory.config.BeanReference;
-import cn.chenyuxian.learnspring.beans.factory.support.DefaultListableBeanFactory;
-import cn.chenyuxian.learnspring.beans.factory.xml.XmlBeanDefinitionReader;
-import cn.chenyuxian.learnspring.context.support.ClassPathXmlApplicationContext;
-import cn.chenyuxian.learnspring.core.io.DefaultResourceLoader;
-import cn.chenyuxian.learnspring.core.io.Resource;
 import cn.chenyuxian.spring.bean.UserDao;
 import cn.chenyuxian.spring.bean.UserService;
+import cn.chenyuxian.spring.beans.PropertyValue;
+import cn.chenyuxian.spring.beans.PropertyValues;
+import cn.chenyuxian.spring.beans.factory.config.BeanDefinition;
+import cn.chenyuxian.spring.beans.factory.config.BeanReference;
+import cn.chenyuxian.spring.beans.factory.support.DefaultListableBeanFactory;
+import cn.chenyuxian.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import cn.chenyuxian.spring.common.MyBeanFactoryPostProcessor;
 import cn.chenyuxian.spring.common.MyBeanPostProcessor;
+import cn.chenyuxian.spring.context.support.ClassPathXmlApplicationContext;
+import cn.chenyuxian.spring.core.io.DefaultResourceLoader;
+import cn.chenyuxian.spring.core.io.Resource;
 import cn.hutool.core.io.IoUtil;
 
 public class ApiTest {

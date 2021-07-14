@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.chenyuxian.learnmybatis.pojo.User;
+import cn.chenyuxian.mybatis.pojo.User;
 
 public class MybatisApiTest {
 	

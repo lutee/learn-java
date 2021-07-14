@@ -10,10 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.chenyuxian.learnmybatis.dao.ISchoolDao;
-import cn.chenyuxian.learnmybatis.dao.IUserDao;
-import cn.chenyuxian.learnmybatis.pojo.School;
-import cn.chenyuxian.learnmybatis.pojo.User;
+import cn.chenyuxian.mybatis.dao.ISchoolDao;
+import cn.chenyuxian.mybatis.dao.IUserDao;
+import cn.chenyuxian.mybatis.pojo.School;
+import cn.chenyuxian.mybatis.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringRunner.class)
