@@ -1,5 +1,7 @@
 package cn.chenyuxian.spring.bean;
 
+import java.util.Random;
+
 import cn.chenyuxian.spring.beans.BeansException;
 import cn.chenyuxian.spring.beans.factory.BeanClassLoaderAware;
 import cn.chenyuxian.spring.beans.factory.BeanFactory;
@@ -10,7 +12,7 @@ import cn.chenyuxian.spring.beans.factory.InitializingBean;
 import cn.chenyuxian.spring.context.ApplicationContext;
 import cn.chenyuxian.spring.context.ApplicationContextAware;
 
-public class UserService implements InitializingBean, DisposableBean, BeanNameAware, BeanClassLoaderAware, ApplicationContextAware, BeanFactoryAware{
+public class UserService implements InitializingBean, DisposableBean, BeanNameAware, BeanClassLoaderAware, ApplicationContextAware, BeanFactoryAware, IUserService{
 	
 	private ApplicationContext applicationContext;
 	private BeanFactory beanFactory;
@@ -20,7 +22,13 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
 	private String location;
 	private IUserDao userDao;
 	
+	@Override
 	public String queryUserInfo() {
+		try {
+			Thread.sleep(new Random(1).nextInt(100));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		 return userDao.queryUserName(uid) + "," + company + "," + location;
 	}
 	
@@ -99,6 +107,17 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
 	public void afterPropertiesSet() throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("执行：UserService.afterPropertiesSet");
+	}
+
+	@Override
+	public String register(String userName) {
+		try {
+			Thread.sleep(new Random(1).nextInt(100));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return "注册用户:" + userName + "success!";
 	}
 	
 	

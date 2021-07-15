@@ -2,13 +2,24 @@ package cn.chenyuxian.spring;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.ClassLayout;
 
+import cn.chenyuxian.spring.aop.AdvisedSupport;
+import cn.chenyuxian.spring.aop.MethodMatcher;
+import cn.chenyuxian.spring.aop.TargetSource;
+import cn.chenyuxian.spring.aop.aspectj.AspectJExpressionPointcut;
+import cn.chenyuxian.spring.aop.framework.Cglib2AopProxy;
+import cn.chenyuxian.spring.aop.framework.JdkDynamicAopProxy;
+import cn.chenyuxian.spring.bean.IUserService;
 import cn.chenyuxian.spring.bean.UserDao;
 import cn.chenyuxian.spring.bean.UserService;
+import cn.chenyuxian.spring.bean.UserServiceInterceptor;
 import cn.chenyuxian.spring.beans.PropertyValue;
 import cn.chenyuxian.spring.beans.PropertyValues;
 import cn.chenyuxian.spring.beans.factory.config.BeanDefinition;
@@ -143,5 +154,43 @@ public class ApiTest {
 		ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
 		applicationContext.publishEvent(new CustomEvent(applicationContext, 12132312L, "成功了"));
 		applicationContext.registerShutdownHook();
+	}
+	
+	@Test
+	public void test_proxy_method() {
+		Object targetObj = new UserService();
+		UserService proxy = (UserService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), targetObj.getClass().getInterfaces(), new InvocationHandler() {
+			
+			
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				return null;
+			}
+		});
+	}
+	
+	@Test
+	public void test_aop() throws NoSuchMethodException, SecurityException {
+		AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* cn.chenyuxian.spring.bean.UserService.*(..))");
+		Class<UserService> clazz = UserService.class;
+		Method method = clazz.getDeclaredMethod("queryUserInfo", null);
+		System.out.println(pointcut.matcher(clazz));
+		System.out.println(pointcut.matches(method, clazz));
+	}
+	
+	@Test
+	public void test_dynamic() {
+		IUserService userService = new UserService();
+		
+		AdvisedSupport advisedSupport = new AdvisedSupport();
+		advisedSupport.setTargetSource(new TargetSource(userService));
+		advisedSupport.setMethodInterceptor(new UserServiceInterceptor());
+		advisedSupport.setMethodMatcher(new AspectJExpressionPointcut("execution (* cn.chenyuxian.spring.bean.IUserService.*(..))"));
+		
+		IUserService proxy_jdk = (IUserService) new JdkDynamicAopProxy(advisedSupport).getProxy();
+		System.out.println("测试结果:" + proxy_jdk.queryUserInfo());
+		
+		IUserService proxy_cglib = (IUserService) new Cglib2AopProxy(advisedSupport);
+		System.out.println("测试结果:" + proxy_cglib.register("花花"));
 	}
 }
